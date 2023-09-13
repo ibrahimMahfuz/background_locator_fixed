@@ -16,7 +16,7 @@ void callbackDispatcher() {
     if (Keys.BCM_SEND_LOCATION == call.method) {
       final Map<dynamic, dynamic> args = call.arguments;
       final Function callback = PluginUtilities.getCallbackFromHandle(
-          CallbackHandle.fromRawHandle(args[Keys.ARG_CALLBACK]))!;
+          CallbackHandle.fromRawHandle(args[Keys.ARG_CALLBACK]));
       final LocationDto location =
           LocationDto.fromJson(args[Keys.ARG_LOCATION]);
       if (callback != null) {
