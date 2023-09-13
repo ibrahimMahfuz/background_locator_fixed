@@ -8,10 +8,10 @@ import 'package:background_locator_2/settings/ios_settings.dart';
 
 class SettingsUtil {
   static Map<String, dynamic> getArgumentsMap(
-      {required void Function(LocationDto) callback,
-      void Function(Map<String, dynamic>)? initCallback,
-      Map<String, dynamic>? initDataCallback,
-      void Function()? disposeCallback,
+      {void Function(LocationDto) callback,
+      void Function(Map<String, dynamic>) initCallback,
+      Map<String, dynamic> initDataCallback,
+      void Function() disposeCallback,
       AndroidSettings androidSettings = const AndroidSettings(),
       IOSSettings iosSettings = const IOSSettings()}) {
     final args = _getCommonArgumentsMap(callback: callback,
@@ -29,23 +29,23 @@ class SettingsUtil {
   }
 
   static Map<String, dynamic> _getCommonArgumentsMap({
-    required void Function(LocationDto) callback,
-    void Function(Map<String, dynamic>)? initCallback,
-    Map<String, dynamic>? initDataCallback,
-    void Function()? disposeCallback
+    void Function(LocationDto) callback,
+    void Function(Map<String, dynamic>) initCallback,
+    Map<String, dynamic> initDataCallback,
+    void Function() disposeCallback
   }) {
     final Map<String, dynamic> args = {
       Keys.ARG_CALLBACK:
-          PluginUtilities.getCallbackHandle(callback)!.toRawHandle(),
+          PluginUtilities.getCallbackHandle(callback).toRawHandle(),
     };
 
     if (initCallback != null) {
       args[Keys.ARG_INIT_CALLBACK] =
-          PluginUtilities.getCallbackHandle(initCallback)!.toRawHandle();
+          PluginUtilities.getCallbackHandle(initCallback).toRawHandle();
     }
     if (disposeCallback != null) {
       args[Keys.ARG_DISPOSE_CALLBACK] =
-          PluginUtilities.getCallbackHandle(disposeCallback)!.toRawHandle();
+          PluginUtilities.getCallbackHandle(disposeCallback).toRawHandle();
     }
     if (initDataCallback != null ){
       args[Keys.ARG_INIT_DATA_CALLBACK] = initDataCallback;
@@ -65,7 +65,7 @@ class SettingsUtil {
         null) {
       args[Keys.ARG_NOTIFICATION_CALLBACK] = PluginUtilities.getCallbackHandle(
               androidSettings
-                  .androidNotificationSettings.notificationTapCallback!)!
+                  .androidNotificationSettings.notificationTapCallback)
           .toRawHandle();
     }
 
