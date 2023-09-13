@@ -22,13 +22,13 @@ class BackgroundLocator {
         {Keys.ARG_CALLBACK_DISPATCHER: callback.toRawHandle()});
   }
 
-  static WidgetsBinding? get _widgetsBinding => WidgetsBinding.instance;
+  static WidgetsBinding get _widgetsBinding => WidgetsBinding.instance;
 
   static Future<void> registerLocationUpdate(
       void Function(LocationDto) callback,
-      {void Function(Map<String, dynamic>)? initCallback,
+      {void Function(Map<String, dynamic>) initCallback,
       Map<String, dynamic> initDataCallback = const {},
-      void Function()? disposeCallback,
+      void Function() disposeCallback,
       bool autoStop = false,
       AndroidSettings androidSettings = const AndroidSettings(),
       IOSSettings iosSettings = const IOSSettings()}) async {
@@ -63,7 +63,7 @@ class BackgroundLocator {
   }
 
   static Future<void> updateNotificationText(
-      {String? title, String? msg, String? bigMsg}) async {
+      {String title, String msg, String bigMsg}) async {
     final Map<String, dynamic> arg = {};
 
     if (title != null) {
