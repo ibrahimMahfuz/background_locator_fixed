@@ -41,8 +41,14 @@ internal fun IsolateHolderService.startLocatorService(context: Context) {
                     Context.MODE_PRIVATE
                 )
                     .getLong(Keys.CALLBACK_DISPATCHER_HANDLE_KEY, 0)
-                val callbackInfo =
-                    FlutterCallbackInformation.lookupCallbackInformation(callbackHandle)
+                var callbackInfo = null;
+                try {
+                    callbackInfo =
+                            FlutterCallbackInformation.lookupCallbackInformation(callbackHandle)
+                }catch (e: IllegalStateException){
+                    Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState");
+                    return;
+                }
 
                 if(callbackInfo == null) {
                     Log.e("IsolateHolderExtension", "Fatal: failed to find callback");
