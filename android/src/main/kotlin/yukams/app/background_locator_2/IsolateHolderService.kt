@@ -75,13 +75,42 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
     private var pluggables: ArrayList<Pluggable> = ArrayList()
 
     override fun onBind(intent: Intent?): IBinder? {
+        stopForeground(true)
         return null
+    }
+
+    override fun onRebind(intent: Intent) {
+        stopForeground(true) // <- remove notification
+    }
+
+    override fun onUnbind(intent: Intent): Boolean {
+        prepareAndStartForeground() // <- show notification again
+        return true
     }
 
     override fun onCreate() {
         super.onCreate()
         startLocatorService(this)
-        startForeground(notificationId, getNotification())
+        prepareAndStartForeground()
+    }
+
+    private fun startForegroundService(intent: Intent) {
+        if (Build.VERSION.SDK_INT >= 26) {
+            context.startForegroundService(intent)
+        } else {
+            // Pre-O behavior.
+            context.startService(intent)
+        }
+    }
+
+    private fun prepareAndStartForeground() {
+        try {
+            val intent = Intent(context, IsolateHolderService::class.java)
+            startForegroundService(intent)
+            startForeground(notificationId, getNotification())
+        } catch (e: Exception) {
+            Log.e("startForegroundNotification: " + e.message)
+        }
     }
 
     private fun start() {
@@ -146,7 +175,7 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
                 stopSelf()
             }
             else {
-                return super.onStartCommand(intent, flags, startId)
+                return START_STICKY_COMPATIBILITY
             }
         }
 
