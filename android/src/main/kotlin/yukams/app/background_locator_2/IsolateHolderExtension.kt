@@ -100,11 +100,11 @@ fun getAccuracy(key: Int): Int {
     }
 }
 
-fun getCallbackInfo(key: Int): FlutterCallbackInformation? {
+fun getCallbackInfo(key: Long): FlutterCallbackInformation? {
     try {
-        return FlutterCallbackInformation.lookupCallbackInformation(key)
+        return FlutterCallbackInformation.lookupCallbackInformation(key);
     }catch (e: IllegalStateException){
         Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState");
-        return null
+        return null;
     }
 }
