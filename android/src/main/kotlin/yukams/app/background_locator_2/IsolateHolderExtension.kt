@@ -19,13 +19,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 internal fun IsolateHolderService.startLocatorService(context: Context) {
 
-    val serviceStarted = AtomicBoolean(IsolateHolderService.isServiceRunning)
+    val serviceStarted = AtomicBoolean(IsolateHolderService.isServiceRunning);
     // start synchronized block to prevent multiple service instant
     synchronized(serviceStarted) {
-        this.context = context
+        this.context = context;
         // resetting the background engine to avoid being stuck after an app crash
-        IsolateHolderService.backgroundEngine?.destroy()
-        IsolateHolderService.backgroundEngine = null
+        IsolateHolderService.backgroundEngine?.destroy();
+        IsolateHolderService.backgroundEngine = null;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -33,31 +33,31 @@ internal fun IsolateHolderService.startLocatorService(context: Context) {
             ) {
                 // We need flutter engine to handle callback, so if it is not available we have to create a
                 // Flutter engine without any view
-                Log.e("IsolateHolderService", "startLocatorService: Start Flutter Engine")
-                IsolateHolderService.backgroundEngine = FlutterEngine(context)
+                Log.e("IsolateHolderService", "startLocatorService: Start Flutter Engine");
+                IsolateHolderService.backgroundEngine = FlutterEngine(context);
 
                 val callbackHandle = context.getSharedPreferences(
                     Keys.SHARED_PREFERENCES_KEY,
                     Context.MODE_PRIVATE
                 )
-                    .getLong(Keys.CALLBACK_DISPATCHER_HANDLE_KEY, 0)
-                val callbackInfo: getCallbackInfo(callbackHandle)
+                    .getLong(Keys.CALLBACK_DISPATCHER_HANDLE_KEY, 0);
+                val callbackInfo: getCallbackInfo(callbackHandle);
                 if(callbackInfo == null) {
-                    Log.e("IsolateHolderExtension", "Fatal: failed to find callback")
-                    return
+                    Log.e("IsolateHolderExtension", "Fatal: failed to find callback");
+                    return;
                 }
 
                 val args = DartExecutor.DartCallback(
                     context.assets,
                     FlutterInjector.instance().flutterLoader().findAppBundlePath(),
                     callbackInfo
-                )
-                IsolateHolderService.backgroundEngine?.dartExecutor?.executeDartCallback(args)
-                isServiceInitialized = true
-                Log.e("IsolateHolderExtension", "service initialized")
+                );
+                IsolateHolderService.backgroundEngine?.dartExecutor?.executeDartCallback(args);
+                isServiceInitialized = true;
+                Log.e("IsolateHolderExtension", "service initialized");
             }
         } catch (e: UnsatisfiedLinkError) {
-            e.printStackTrace()
+            e.printStackTrace();
         }
     }
 
@@ -72,21 +72,21 @@ internal fun IsolateHolderService.startLocatorService(context: Context) {
                 context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED
             ) {
-                backgroundChannel.setMethodCallHandler(this)
+                backgroundChannel.setMethodCallHandler(this);
             }
         } catch (e: RuntimeException) {
-            e.printStackTrace()
+            e.printStackTrace();
         }
     }
 }
 
 fun getLocationRequest(intent: Intent): LocationRequestOptions {
-    val interval: Long = (intent.getIntExtra(Keys.SETTINGS_INTERVAL, 10) * 1000).toLong()
-    val accuracyKey = intent.getIntExtra(Keys.SETTINGS_ACCURACY, 4)
-    val accuracy = getAccuracy(accuracyKey)
-    val distanceFilter = intent.getDoubleExtra(Keys.SETTINGS_DISTANCE_FILTER, 0.0)
+    val interval: Long = (intent.getIntExtra(Keys.SETTINGS_INTERVAL, 10) * 1000).toLong();
+    val accuracyKey = intent.getIntExtra(Keys.SETTINGS_ACCURACY, 4);
+    val accuracy = getAccuracy(accuracyKey);
+    val distanceFilter = intent.getDoubleExtra(Keys.SETTINGS_DISTANCE_FILTER, 0.0);
 
-    return LocationRequestOptions(interval, accuracy, distanceFilter.toFloat())
+    return LocationRequestOptions(interval, accuracy, distanceFilter.toFloat());
 }
 
 fun getAccuracy(key: Int): Int {
@@ -102,9 +102,9 @@ fun getAccuracy(key: Int): Int {
 
 fun getCallbackInfo(key: Long): FlutterCallbackInformation? {
     try {
-        return FlutterCallbackInformation.lookupCallbackInformation(key)
+        return FlutterCallbackInformation.lookupCallbackInformation(key);
     }catch (e: IllegalStateException){
-        Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState")
-        return null
+        Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState");
+        return null;
     }
 }
