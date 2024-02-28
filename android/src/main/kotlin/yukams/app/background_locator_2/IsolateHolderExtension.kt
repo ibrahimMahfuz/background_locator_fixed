@@ -24,7 +24,7 @@ internal fun IsolateHolderService.startLocatorService(context: Context) {
     synchronized(serviceStarted) {
         this.context = context
         // resetting the background engine to avoid being stuck after an app crash
-        IsolateHolderService.backgroundEngine?.destroy();
+        IsolateHolderService.backgroundEngine?.destroy()
         IsolateHolderService.backgroundEngine = null
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -43,8 +43,8 @@ internal fun IsolateHolderService.startLocatorService(context: Context) {
                     .getLong(Keys.CALLBACK_DISPATCHER_HANDLE_KEY, 0)
                 val callbackInfo: getCallbackInfo(callbackHandle)
                 if(callbackInfo == null) {
-                    Log.e("IsolateHolderExtension", "Fatal: failed to find callback");
-                    return;
+                    Log.e("IsolateHolderExtension", "Fatal: failed to find callback")
+                    return
                 }
 
                 val args = DartExecutor.DartCallback(
@@ -102,9 +102,9 @@ fun getAccuracy(key: Int): Int {
 
 fun getCallbackInfo(key: Long): FlutterCallbackInformation? {
     try {
-        return FlutterCallbackInformation.lookupCallbackInformation(key);
+        return FlutterCallbackInformation.lookupCallbackInformation(key)
     }catch (e: IllegalStateException){
-        Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState");
-        return null;
+        Log.e("IsolateHolderExtension", "Fatal: failed to find callback due to illegalState")
+        return null
     }
 }
